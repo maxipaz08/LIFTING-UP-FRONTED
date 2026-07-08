@@ -1,6 +1,6 @@
 export const login = async (email, password) => {
   try {
-    const response = await fetch('http://localhost:3001/api/usuarios/login', {
+    const response = await fetch('https://lifting-up-backend.onrender.com/api/usuarios/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export const login = async (email, password) => {
       const { password: _password, ...userWithoutPassword } = result.data;
       return userWithoutPassword;
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error durante el login:', error);
