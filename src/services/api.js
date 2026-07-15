@@ -2,7 +2,19 @@ const API_URL = 'https://lifting-up-backend.onrender.com/api';
 
 // ─── Helper para manejar respuestas ─────────────────────────────────────
 const handleResponse = async (response) => {
-    const json = await response.json();
+    const contentType = response.headers.get("content-type");
+    let json = null;
+
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+        json = await response.json();
+    } else {
+        const text = await response.text();
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}: La respuesta del servidor no es JSON válido. Verifica si el endpoint existe.`);
+        }
+        return text;
+    }
+
     if (!response.ok) {
         const msg = json?.message || `Error HTTP ${response.status}`;
         throw new Error(msg);
@@ -31,6 +43,25 @@ export const createUsuario = async (usuarioData) => {
     });
     return handleResponse(response);
 };
+
+export const createAdmin = async (adminData) => {
+    const response = await fetch(`${API_URL}/admins`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(adminData)
+    })
+
+    return handleResponse(response)
+}
+
+// ─── GET /api/admins — Obtener administradores ──────────────────────────
+export const getAdmins = async () => {
+    const response = await fetch(`${API_URL}/admins`);
+    return handleResponse(response);
+};
+
 
 // ─── PUT /api/usuarios/:id — Actualizar usuario ──────────────────────────
 export const updateUsuario = async (id, usuarioData) => {

@@ -50,7 +50,7 @@ const UsuarioForm = ({ form, handleChange, generarPassword, isEdit }) => {
         <input
           name="password"
           type="text"
-          placeholder="Contraseña (opcional)"
+          placeholder="Contraseña"
           value={form.password || ''}
           onChange={handleChange}
           className="input-modal"

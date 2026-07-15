@@ -1,72 +1,187 @@
-import React from 'react';
+import React from 'react'
 
-const UsuariosTable = ({ usuarios, onVer, onEdit, onDelete }) => {
+const UsuariosTable = ({
+  usuarios,
+  onVer,
+  onEdit,
+  onDelete
+}) => {
+  if (!usuarios || usuarios.length === 0) {
+    return (
+      <div className="usuarios-vacio">
+        <span className="usuarios-vacio-icon">
+          ♙
+        </span>
+
+        <p>
+          No se encontraron usuarios
+        </p>
+      </div>
+    )
+  }
+
   return (
-    <div className="tabla-wrapper">
-      <table className="tabla">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Email</th>
-            <th>Objetivo</th>
-            <th>Nivel</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map((u) => (
-            <tr key={u.id ?? u.id_usuario}>
-              <td>{u.id ?? u.id_usuario}</td>
-              <td>{u.nombre}</td>
-              <td>{u.apellido}</td>
-              <td>{u.email}</td>
-              <td>{u.objetivo ?? '—'}</td>
-              <td>{u.nivel_entrenamiento ?? '—'}</td>
-              <td>
-                <span className={`badge-estado ${u.estado === 'Inactivo' ? 'inactivo' : 'activo'}`}>
-                  {u.estado ?? 'Activo'}
-                </span>
-              </td>
-              <td style={{ whiteSpace: 'nowrap' }}>
-                <button
-                  id={`btn-ver-${u.id ?? u.id_usuario}`}
-                  className="btn-ver"
-                  onClick={() => onVer(u)}
-                  title="Ver detalle"
-                >
-                  Ver
-                </button>
-                <button
-                  id={`btn-editar-${u.id ?? u.id_usuario}`}
-                  className="btn-editar"
-                  onClick={() => onEdit(u)}
-                  title="Editar usuario"
-                >
-                  Editar
-                </button>
-                <button
-                  id={`btn-eliminar-${u.id ?? u.id_usuario}`}
-                  className="btn-eliminar"
-                  onClick={() => onDelete(u)}
-                  title="Eliminar usuario"
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-          {usuarios.length === 0 && (
-            <tr>
-              <td colSpan="8" className="tabla-vacio">No se encontraron usuarios</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+    <div className="usuarios-lista">
 
-export default UsuariosTable;
+      {usuarios.map((usuario) => {
+        const id =
+          usuario.id ??
+          usuario.id_usuario
+
+        const nombreCompleto =
+          `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim()
+
+        const estado =
+          usuario.estado || 'Activo'
+
+        return (
+          <article
+            className="usuario-card"
+            key={id}
+          >
+            <div className="usuario-card-header">
+
+              <div>
+                <h2 className="usuario-card-nombre">
+                  {nombreCompleto || 'Sin nombre'}
+                </h2>
+
+                <span className="usuario-card-id">
+                  ID: {id}
+                </span>
+              </div>
+
+              <span
+                className={`badge-estado ${estado === 'Inactivo'
+                    ? 'inactivo'
+                    : 'activo'
+                  }`}
+              >
+                {estado}
+              </span>
+
+            </div>
+
+            <div className="usuario-card-datos">
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Email:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.email || '—'}
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Contraseña:
+                </span>
+
+                <span className="usuario-dato-value usuario-password">
+                  ••••••
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Experiencia:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.nivel_entrenamiento ||
+                    '—'}
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Objetivo:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.objetivo || '—'}
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Altura:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.altura
+                    ? `${usuario.altura} m`
+                    : '—'}
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Peso corporal:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.peso
+                    ? `${usuario.peso} kg`
+                    : '—'}
+                </span>
+              </div>
+
+              <div className="usuario-dato">
+                <span className="usuario-dato-label">
+                  Rol:
+                </span>
+
+                <span className="usuario-dato-value">
+                  {usuario.rol === 'admin'
+                    ? 'Administrador'
+                    : 'Atleta'}
+                </span>
+              </div>
+
+            </div>
+
+            <div className="usuario-card-acciones">
+
+              <button
+                id={`btn-ver-${id}`}
+                type="button"
+                className="btn-ver"
+                onClick={() => onVer(usuario)}
+                title="Ver detalle"
+              >
+                Ver
+              </button>
+
+              <button
+                id={`btn-editar-${id}`}
+                type="button"
+                className="btn-editar"
+                onClick={() => onEdit(usuario)}
+                title="Editar usuario"
+              >
+                Editar
+              </button>
+
+              <button
+                id={`btn-eliminar-${id}`}
+                type="button"
+                className="btn-eliminar"
+                onClick={() => onDelete(usuario)}
+                title="Eliminar usuario"
+              >
+                Eliminar
+              </button>
+
+            </div>
+          </article>
+        )
+      })}
+
+    </div>
+  )
+}
+
+export default UsuariosTable
