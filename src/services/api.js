@@ -1,4 +1,4 @@
-const API_URL = 'https://lifting-up-backend.onrender.com/api';
+const API_URL = 'https://lifting-up-backend-production.up.railway.app/api';
 
 // ─── Helper para manejar respuestas ─────────────────────────────────────
 const handleResponse = async (response) => {
