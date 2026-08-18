@@ -194,7 +194,12 @@ function AdminDashboard() {
             'Completá todos los datos del administrador',
             'error'
           )
-          return
+        }
+
+        const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!pwdRegex.test(formAdmin.password)) {
+          mostrarToast('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.', 'error');
+          return;
         }
 
         const res = await createAdmin(formAdmin)
@@ -233,6 +238,12 @@ function AdminDashboard() {
           formUsuario.nombre,
           formUsuario.apellido
         )
+      } else {
+        const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!pwdRegex.test(dataToSave.password)) {
+          mostrarToast('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.', 'error');
+          return;
+        }
       }
 
       const res = await createUsuario(dataToSave)
@@ -980,8 +991,12 @@ function AdminDashboard() {
                 [
                   'Estado',
                   modalVer.estado || 'Activo'
-                ]
-              ].map(([label, valor]) => (
+                ],
+                modalVer.rol !== 'admin' ? [
+                  'Estado Email',
+                  modalVer.email_verificado === 1 ? 'Verificado' : 'Pendiente'
+                ] : null
+              ].filter(Boolean).map(([label, valor]) => (
                 <div
                   key={label}
                   className="detalle-row"

@@ -51,14 +51,27 @@ const UsuariosTable = ({
                 </span>
               </div>
 
-              <span
-                className={`badge-estado ${estado === 'Inactivo'
-                    ? 'inactivo'
-                    : 'activo'
-                  }`}
-              >
-                {estado}
-              </span>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <span
+                  className={`badge-estado ${estado === 'Inactivo'
+                      ? 'inactivo'
+                      : 'activo'
+                    }`}
+                >
+                  {estado}
+                </span>
+
+                {usuario.rol !== 'admin' && (
+                  <span
+                    className={`badge-estado ${usuario.email_verificado === 1
+                        ? 'activo'
+                        : 'inactivo'
+                      }`}
+                  >
+                    {usuario.email_verificado === 1 ? 'Email verificado' : 'Email pendiente'}
+                  </span>
+                )}
+              </div>
 
             </div>
 
