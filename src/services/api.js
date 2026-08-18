@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'https://lifting-up-backend.onrender.com/api';
 
 // ─── Helper para manejar respuestas ─────────────────────────────────────
 const handleResponse = async (response) => {
