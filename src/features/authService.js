@@ -1,6 +1,6 @@
 export const login = async (email, password) => {
   try {
-    const response = await fetch('https://lifting-up-backend.onrender.com/api/usuarios/login', {
+    const response = await fetch('https://lifting-up-backend.onrender.com/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

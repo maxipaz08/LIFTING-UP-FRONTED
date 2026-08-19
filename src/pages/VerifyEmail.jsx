@@ -40,7 +40,7 @@ function VerifyEmail() {
     setSuccessMsg('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/usuarios/verificar-email', {
+      const response = await fetch('https://lifting-up-backend.onrender.com/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, codigo })
