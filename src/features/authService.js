@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
 export const login = async (email, password) => {
   try {
-    const response = await fetch('https://lifting-up-backend.onrender.com/api', {
+    const response = await fetch(`${API_URL}/usuarios/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

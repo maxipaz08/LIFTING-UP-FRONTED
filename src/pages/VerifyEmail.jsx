@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, saveUser, logout } from '../features/authService';
 import '../styles/verifyEmail.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
 function VerifyEmail() {
   const [codigo, setCodigo] = useState('');
   const [error, setError] = useState('');
@@ -18,6 +20,12 @@ function VerifyEmail() {
     navigate('/');
   };
   const user = getCurrentUser();
+
+  useEffect(() => {
+    if (!user || !user.email) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     let timer;
@@ -40,7 +48,8 @@ function VerifyEmail() {
     setSuccessMsg('');
 
     try {
-      const response = await fetch('https://lifting-up-backend.onrender.com/api', {
+      console.log("Enviando email a verificar:", user?.email);
+      const response = await fetch(`${API_URL}/usuarios/verificar-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, codigo })
@@ -73,7 +82,8 @@ function VerifyEmail() {
     setSuccessMsg('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/usuarios/reenviar-codigo', {
+      console.log("Enviando email a verificar:", user?.email);
+      const response = await fetch(`${API_URL}/usuarios/reenviar-codigo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email })
