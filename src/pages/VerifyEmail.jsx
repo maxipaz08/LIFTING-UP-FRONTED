@@ -3,7 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, saveUser, logout } from '../features/authService';
 import '../styles/verifyEmail.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const cleanUrl = (rawUrl) => {
+  if (!rawUrl) return 'https://lifting-up-backend.onrender.com/api';
+  // Elimina corchetes, comillas y espacios accidentales
+  let cleaned = rawUrl.replace(/[\[\]"']/g, '').trim();
+  // Si contiene paréntesis de un link markdown [texto](url), extrae solo la URL
+  if (cleaned.includes('(') && cleaned.includes(')')) {
+    const match = cleaned.match(/\(([^)]+)\)/);
+    if (match) cleaned = match[1];
+  }
+  return cleaned.replace(/\/$/, ''); // Quita la barra final si la tiene
+};
+const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
+console.log("API_URL configurada actualmente:", API_URL);
 
 function VerifyEmail() {
   const [codigo, setCodigo] = useState('');
