@@ -15,7 +15,7 @@ import Dashboard from './pages/Dashboard'
 import Register from './pages/Register'
 import TestDB from './pages/TestDB'
 import VerifyEmail from './pages/VerifyEmail'
-import Attendance from './pages/Attendance'
+import AtletaDashboard from './components/AtletaDashboard'
 
 const RequireAuth = ({ children, allowedRoles }) => {
   const user = getCurrentUser()
@@ -66,8 +66,30 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/test-db" element={<TestDB />} />
-        
-        <Route path="/asistencia" element={<Attendance />} />
+        <Route 
+          path="/asistencia" 
+          element={
+            <RequireAuth allowedRoles={['atleta']}>
+              <AtletaDashboard vista="asistencia" />
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/rutina" 
+          element={
+            <RequireAuth allowedRoles={['atleta']}>
+              <AtletaDashboard vista="rutina" />
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/calendario" 
+          element={
+            <RequireAuth allowedRoles={['atleta']}>
+              <AtletaDashboard vista="calendario" />
+            </RequireAuth>
+          } 
+        />
 
         <Route
           path="/verify-email"

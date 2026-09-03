@@ -1,14 +1,15 @@
 const cleanUrl = (rawUrl) => {
-  if (!rawUrl) return 'https://lifting-up-backend.onrender.com/api';
-  // Elimina corchetes, comillas y espacios accidentales
-  let cleaned = rawUrl.replace(/[\[\]"']/g, '').trim();
-  // Si contiene paréntesis de un link markdown [texto](url), extrae solo la URL
-  if (cleaned.includes('(') && cleaned.includes(')')) {
-    const match = cleaned.match(/\(([^)]+)\)/);
-    if (match) cleaned = match[1];
-  }
-  return cleaned.replace(/\/$/, ''); // Quita la barra final si la tiene
+    if (!rawUrl) return 'https://lifting-up-backend.onrender.com/api';
+    // Elimina corchetes, comillas y espacios accidentales
+    let cleaned = rawUrl.replace(/[\[\]"']/g, '').trim();
+    // Si contiene paréntesis de un link markdown [texto](url), extrae solo la URL
+    if (cleaned.includes('(') && cleaned.includes(')')) {
+        const match = cleaned.match(/\(([^)]+)\)/);
+        if (match) cleaned = match[1];
+    }
+    return cleaned.replace(/\/$/, ''); // Quita la barra final si la tiene
 };
+
 const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
 console.log("API_URL configurada actualmente:", API_URL);
 
@@ -92,3 +93,62 @@ export const deleteUsuario = async (id) => {
     });
     return handleResponse(response);
 };
+
+// ─── RUTINAS ─────────────────────────────────────────────────────────────
+export const getRutinas = async (id_usuario = '') => {
+    const query = id_usuario ? `?id_usuario=${id_usuario}` : '';
+    const response = await fetch(`${API_URL}/rutinas${query}`);
+    return handleResponse(response);
+};
+
+export const createRutina = async (data) => {
+    const response = await fetch(`${API_URL}/rutinas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+};
+
+export const updateRutina = async (id, data) => {
+    const response = await fetch(`${API_URL}/rutinas/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+};
+
+// ─── ASISTENCIAS ─────────────────────────────────────────────────────────
+export const getAsistencias = async (id_usuario) => {
+    // Si id_usuario viene undefined, no envía query corrupto
+    const query = id_usuario ? `?id_usuario=${id_usuario}` : '';
+    const response = await fetch(`${API_URL}/asistencia${query}`);
+    return handleResponse(response);
+};
+
+export const createAsistencia = async (data) => {
+    // Aseguramos que data tenga id_usuario y fecha antes de enviar
+    const response = await fetch(`${API_URL}/asistencia`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+};
+
+// ─── EJERCICIOS ──────────────────────────────────────────────────────────
+export const getEjercicios = async () => {
+    const response = await fetch(`${API_URL}/ejercicios`);
+    return handleResponse(response);
+};
+
+export const createEjercicio = async (data) => {
+    const response = await fetch(`${API_URL}/ejercicios`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+};
+

@@ -1,19 +1,36 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/adminDashboard.css';
 
-// Accept onLogout prop to match sidebar footer logout action
-function AtletaNavbar({ onLogout }) {
+// Accept onLogout and moduloPendiente props
+function AtletaNavbar({ onLogout, moduloPendiente }) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { name: 'Home', path: '/home', icon: 'home.png' },
-    { name: 'Progreso', path: '/progreso', icon: 'progreso.png' },
-    { name: 'Nutrición', path: '/nutricion', icon: 'nutricion.png' },
-    { name: 'Rutina', path: '/rutina', icon: 'rutina.png' },
-    { name: 'Calendario', path: '/calendario', icon: 'calendario.png' },
-    { name: 'Asistencia', path: '/asistencia', icon: 'asistencia.png' }
+    { name: 'Home', path: '/home', icon: 'home.png', developed: true },
+    { name: 'Progreso', path: '/progreso', icon: 'progreso.png', developed: false },
+    { name: 'Nutrición', path: '/nutricion', icon: 'nutricion.png', developed: false },
+    { name: 'Rutina', path: '/rutina', icon: 'rutina.png', developed: true },
+    { name: 'Calendario', path: '/calendario', icon: 'calendario.png', developed: true },
+    { name: 'Asistencia', path: '/asistencia', icon: 'asistencia.png', developed: true }
   ];
+
+  const handleNavClick = (item) => {
+    if (item.developed) {
+      navigate(item.path);
+    } else {
+      if (moduloPendiente) {
+        moduloPendiente(item.name);
+      } else {
+        // Fallback global toast if not provided
+        const toast = document.createElement('div');
+        toast.className = 'toast error';
+        toast.innerText = 'Sección en desarrollo';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+      }
+    }
+  };
 
   return (
     <nav className="admin-sidebar atleta-sidebar">
@@ -32,7 +49,7 @@ function AtletaNavbar({ onLogout }) {
             key={item.name}
             type="button"
             className={`sidebar-item ${location.pathname === item.path ? 'activo' : ''}`}
-            onClick={() => navigate(item.path)}
+            onClick={() => handleNavClick(item)}
           >
             <img
               src={`/icons/atleta/${item.icon}`}
